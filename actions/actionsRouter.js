@@ -1,6 +1,5 @@
 const express = require('express');
 const Actions = require('./actionModel');
-const Projects = require('../projects/projectModel')
 const actionsRouter = express.Router();
 
 actionsRouter.get('/', (req, res) => {
@@ -42,6 +41,24 @@ actionsRouter.post('/', (req, res) => {
     else {
         res.status(400).json(message400);
     }
+});
+
+actionsRouter.delete('/:id', (req, res) => {
+    const id = req.params.id;
+    const message200 = { error: `Action id: ${id} was successfully deleted` };
+    const message404 = { error: `Action id:${id} does not exist.` };
+    const message500 = { error: `Action id:${id} could not be removed` };
+
+    Actions
+        .remove(id)
+        .then(response => {
+            response === 1
+                ? res.status(200).json(message200)
+                : res.status(404).json(message404)
+        })
+        .catch(error => {
+            res.status(500).json(message500);
+        });
 });
 
 module.exports = actionsRouter;
