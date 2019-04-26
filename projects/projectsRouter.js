@@ -27,6 +27,21 @@ projectsRouter.get('/:id', (req, res) => {
         .catch(err => { res.status(500).json(message500) })
 });
 
+projectsRouter.get('/:id/actions', (req, res) => {
+    const { id } = req.params;
+    const message404 = { error: `Project id: ${id} does not exist.` }
+    const message500 = { error: `Project id: ${id} can not be retrieved.` }
+
+    Projects
+        .get(id)
+        .then(project => {
+            project
+                ? res.status(200).json(project.actions)
+                : res.status(404).json(message404);
+        })
+        .catch(err => { res.status(500).json(message500) })
+});
+
 projectsRouter.post('/', (req, res) => {
     const { name, description } = req.body;
     const message400 = { error: "Please provide name and description for the project." }
