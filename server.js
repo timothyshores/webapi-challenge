@@ -10,7 +10,7 @@ server.use(express.json());
 server.get('/', (req, res) => {
     res.send(`
     <h2>Web 18 - Web API Sprint Challenge </h2>
-    <p>Actions Endpoints</p>
+    <p><strong>Actions Endpoints</strong></p>
     <ul>
         <li>GET /api/actions </li>
         <li>GET /api/actions/:id </li>
@@ -18,10 +18,11 @@ server.get('/', (req, res) => {
         <li>DELETE /api/actions/:id</li>
         <li>PUT /api/actions/:id</li>
     </ul>
-    <p>Projects Endpoints</p>
+    <p><strong>Projects Endpoints</strong></p>
     <ul>
         <li>GET /api/projects </li>
         <li>GET /api/projects/:id </li>
+        <li>GET /api/projects/:id/actions </li>
         <li>POST /api/projects </li>
         <li>DELETE /api/projects/:id</li>
         <li>PUT /api/projects/:id</li>
