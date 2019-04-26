@@ -61,4 +61,24 @@ actionsRouter.delete('/:id', (req, res) => {
         });
 });
 
+actionsRouter.put('/:id', (req, res) => {
+    const { id } = req.params;
+    const { project_id, description, notes, completed } = req.body;
+
+    const message400 = { error: `Please provide a valid project_id, description, notes and completed status for action id: ${id}` };
+    const message404 = { error: `Action id: ${id} does not exist` };
+    const message500 = { error: `Action id: ${id} could not be updated` };
+
+    (project_id === '' || description === '' || notes === '' || completed === '')
+        ? res.status(400).json(message400)
+        : Actions
+            .update(id, { project_id, description, notes, completed })
+            .then(action => {
+                action === null
+                    ? res.status(404).json(message404)
+                    : res.status(200).json(action);
+            })
+            .catch(error => { res.status(500).json(message500) });
+});
+
 module.exports = actionsRouter;
