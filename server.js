@@ -2,6 +2,7 @@ const express = require('express');
 
 const actionsRouter = require('./actions/actionsRouter');
 const projectsRouter = require('./projects/projectsRouter');
+const Projects = require('./projects/projectModel');
 
 const server = express();
 server.use(express.json());
@@ -28,7 +29,24 @@ server.get('/', (req, res) => {
     `);
 });
 
-server.use('/api/actions', actionsRouter);
+const validProjectID = (req, res, next) => {
+    const { project_id } = req.body;
+    const message404 = { error: `Project id: ${project_id} does not exist` };
+
+    req.method === 'POST'
+        ? Projects
+            .get(project_id)
+            .then(projects => {
+                projects === null
+                    ? res.status(404).json(message404)
+                    : next();
+            })
+            .catch(err => console.log(err))
+            .catch(error => { res.status(500).json(message500) })
+        : next();
+}
+
+server.use('/api/actions', validProjectID, actionsRouter);
 server.use('/api/projects', projectsRouter);
 
 module.exports = server;
