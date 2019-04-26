@@ -27,4 +27,20 @@ projectsRouter.get('/:id', (req, res) => {
         .catch(err => { res.status(500).json(message500) })
 });
 
+projectsRouter.post('/', (req, res) => {
+    const { name, description } = req.body;
+    const message400 = { error: "Please provide name and description for the project." }
+    const message500 = { error: "There was an error while saving the project to the database" };
+
+    if (name && description) {
+        Projects
+            .insert({ name, description })
+            .then(project => { res.status(201).json(project) })
+            .catch(err => { res.status(500).json(message500) })
+    }
+    else {
+        res.status(400).json(message400);
+    }
+});
+
 module.exports = projectsRouter;
