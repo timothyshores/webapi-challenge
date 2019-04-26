@@ -61,4 +61,24 @@ projectsRouter.delete('/:id', (req, res) => {
         });
 });
 
+projectsRouter.put('/:id', (req, res) => {
+    const { id } = req.params;
+    const { name, description, completed } = req.body;
+
+    const message400 = { error: `Please provide a valid name, description and completed status for post id: ${id}` };
+    const message404 = { error: `Project id: ${id} does not exist` };
+    const message500 = { error: `Project id: ${id} could not be removed` };
+
+    (name === '' || description === '' || completed === '')
+        ? res.status(400).json(message400)
+        : Projects
+            .update(id, { name, description, completed })
+            .then(response => {
+                projects === null
+                    ? res.status(404).json(message404)
+                    : res.status(200).json(response);
+            })
+            .catch(error => { res.status(500).json(message500) });
+});
+
 module.exports = projectsRouter;
